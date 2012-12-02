@@ -5,12 +5,23 @@ body {
 }
 
 .container {
-  width: 600px;
+  width: 500px;
   padding-top: 100px;
   margin: auto;
 }
 
 #content {
-  width: 600px;
-  height: 600px;
+  width: 500px;
+  height: 500px;
+}
+
+.tile-row {
+  display: block;
+  height: 50px;
+}
+
+.tile-item {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
 }

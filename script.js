@@ -1,20 +1,44 @@
 (function() {
-  var ColorSet;
+  var ColorSet, choice;
 
   window.TW = {};
 
+  choice = function(list) {
+    return list[_.random(list.length - 1)];
+  };
+
   window.TW.main = function() {
-    var $el, cs;
+    var $el, colorSets, cols, half, numColorSets, rows, size;
     $el = $('#content');
-    cs = new ColorSet();
-    return $el.html("<svg version=\"1.1\"\n   baseProfile=\"full\"\n   xmlns=\"http://www.w3.org/2000/svg\">\n     <rect width=\"100%\" height=\"100%\" fill=\"" + (cs.get(0)) + "\" />\n     <circle cx=\"150\" cy=\"100\" r=\"80\" fill=\"" + (cs.get(1)) + "\" />\n     <circle cx=\"150\" cy=\"100\" r=\"40\" fill=\"" + (cs.get(2)) + "\" />\n     <circle cx=\"150\" cy=\"100\" r=\"20\" fill=\"" + (cs.get(3)) + "\" />\n</svg>");
+    rows = 10;
+    cols = 10;
+    size = 50;
+    half = size / 2;
+    numColorSets = 3;
+    _.each(_.range(rows), function(row) {
+      var $row;
+      $row = $('<div class="tile-row">');
+      $el.append($row);
+      return _.each(_.range(cols), function(col) {
+        return $row.append($('<div class="tile-item">'));
+      });
+    });
+    colorSets = [new ColorSet()];
+    _.each(_.range(numColorSets - 1), function(i) {
+      return colorSets.push(new ColorSet(choice(colorSets[i].colors)));
+    });
+    return $el.find('.tile-item').each(function(ix, item) {
+      var cs;
+      cs = choice(colorSets);
+      return $(item).html("<svg version=\"1.1\"\n   baseProfile=\"full\"\n   xmlns=\"http://www.w3.org/2000/svg\">\n     <rect width=\"100%\" height=\"100%\" fill=\"" + (cs.get(0)) + "\" />\n     <circle cx=\"" + half + "\" cy=\"" + half + "\" r=\"" + half + "\" fill=\"" + (cs.get(1)) + "\" />\n     <circle cx=\"" + half + "\" cy=\"" + half + "\" r=\"" + (half * 0.5) + "\" fill=\"" + (cs.get(2)) + "\" />\n     <circle cx=\"" + half + "\" cy=\"" + half + "\" r=\"" + (half * 0.25) + "\" fill=\"" + (cs.get(2)) + "\" />\n</svg>");
+    });
   };
 
   ColorSet = (function() {
 
-    function ColorSet() {
-      var base, methods;
-      base = $.xcolor.random();
+    function ColorSet(base) {
+      var methods;
+      this.base = base != null ? base : $.xcolor.random();
       methods = [
         $.xcolor.triad, $.xcolor.tetrad, $.xcolor.splitcomplement, function(color) {
           return $.xcolor.analogous(color, 4);
@@ -22,7 +46,7 @@
           return $.xcolor.monochromatic(color, 3);
         }
       ];
-      this.colors = methods[_.random(methods.length - 1)](base);
+      this.colors = choice(methods)(this.base);
     }
 
     ColorSet.prototype.get = function(i) {
