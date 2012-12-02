@@ -19,7 +19,7 @@ window.TW.main = ->
   colorSets = [new ColorSet()]
 
   _.each _.range(numColorSets - 1), (i) ->
-    colorSets.push(new ColorSet(choice(colorSets[i].colors)))
+    colorSets.push(new ColorSet(choice(_.rest(colorSets[i].colors))))
 
   $el.find('.tile-item').each (ix, item) ->
     cs = choice(colorSets)

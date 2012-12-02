@@ -25,7 +25,7 @@
     });
     colorSets = [new ColorSet()];
     _.each(_.range(numColorSets - 1), function(i) {
-      return colorSets.push(new ColorSet(choice(colorSets[i].colors)));
+      return colorSets.push(new ColorSet(choice(_.rest(colorSets[i].colors))));
     });
     return $el.find('.tile-item').each(function(ix, item) {
       var cs;
